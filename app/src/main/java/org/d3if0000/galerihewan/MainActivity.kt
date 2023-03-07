@@ -2,10 +2,13 @@ package org.d3if0000.galerihewan
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+    private val hewan = listOf("Ayam", "Bebek", "Domba", "Kambing", "Sapi")
+    private var index = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -15,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNext() {
-        Log.d("MainActivity", "Tombol Diklik!")
+        index++
+        val textView: TextView = findViewById(R.id.nameTextView)
+        textView.text = hewan[index]
     }
 }
