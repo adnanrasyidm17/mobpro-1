@@ -2,7 +2,8 @@ package org.d3if0000.perhitunganbmi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
+import android.widget.Toast
 import org.d3if0000.perhitunganbmi.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.button.setOnClickListener { hitungBmi() }
+        binding.resetButton.setOnClickListener { resetData() }
     }
 
     private fun hitungBmi() {
@@ -56,5 +58,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return getString(stringRes)
+    }
+
+    private fun resetData() {
+        binding.beratEditText.setText("")
+        binding.tinggiEditText.setText("")
+        binding.radioGroup.clearCheck()
+        binding.bmiTextView.setText("")
+        binding.kategoriTextView.setText("")
     }
 }
