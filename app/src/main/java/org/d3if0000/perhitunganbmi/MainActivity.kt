@@ -61,8 +61,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetData() {
-        binding.beratEditText.setText("")
-        binding.tinggiEditText.setText("")
+        binding.beratBadanInp.setText("")
+        binding.tinggiBadanInp.setText("")
         binding.radioGroup.clearCheck()
         binding.bmiTextView.setText("")
         binding.kategoriTextView.setText("")
