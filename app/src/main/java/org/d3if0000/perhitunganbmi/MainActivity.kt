@@ -2,8 +2,10 @@ package org.d3if0000.perhitunganbmi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
+import android.widget.Toast
 import org.d3if0000.perhitunganbmi.databinding.ActivityMainBinding
+import org.d3if0000.perhitunganbmi.model.KategoriBmi
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,24 +39,34 @@ class MainActivity : AppCompatActivity() {
         val isMale = selectedId == R.id.priaRadioButton
         val bmi = berat.toFloat() / (tinggiCm * tinggiCm)
         val kategori = getKategori(bmi, isMale)
+
         binding.bmiTextView.text = getString(R.string.bmi_x, bmi)
-        binding.kategoriTextView.text = getString(R.string.kategori_x, kategori)
+        binding.kategoriTextView.text = getString(R.string.kategori_x, getKategoriLabel())
     }
 
-    private fun getKategori(bmi: Float, isMale: Boolean): String {
-        val stringRes = if (isMale) {
+    private fun getKategori(bmi: Float, isMale: Boolean): KategoriBmi {
+        val kategori = if (isMale) {
             when {
-                bmi < 20.5 -> R.string.kurus
-                bmi >= 27.0 -> R.string.gemuk
-                else -> R.string.ideal
+                bmi < 20.5 -> KategoriBmi.KURUS
+                bmi >= 27.0 -> KategoriBmi.GEMUK
+                else -> KategoriBmi.IDEAL
             }
         } else {
             when {
-                bmi < 18.5 -> R.string.kurus
-                bmi >= 25.0 -> R.string.gemuk
-                else -> R.string.ideal
+                bmi < 18.5 -> KategoriBmi.KURUS
+                bmi >= 25.0 -> KategoriBmi.GEMUK
+                else -> KategoriBmi.IDEAL
             }
         }
-        return getString(stringRes)
+        return kategori
+    }
+
+    private fun getKategoriLabel(kategori: KategoriBmi): String {
+        val stringRes = when (kategori) {
+            KategoriBmi.KURUS -> R.string.kurus
+            KategoriBmi.IDEAL -> R.string.ideal
+            KategoriBmi.GEMUK -> R.string.gemuk
+        }
+        return getString(kategori)
     }
 }
