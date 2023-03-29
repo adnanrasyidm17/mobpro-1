@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import org.d3if0000.perhitunganbmi.databinding.ActivityMainBinding
 import org.d3if0000.perhitunganbmi.model.HasilBmi
 import org.d3if0000.perhitunganbmi.model.KategoriBmi
@@ -11,9 +12,12 @@ import org.d3if0000.perhitunganbmi.model.KategoriBmi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -37,20 +41,12 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val result = hitungBmi(
+        val result = viewModel.hitungBmi(
             berat.toFloat(),
             tinggi.toFloat(),
             selectedId == R.id.priaRadioButton
         )
-
         showResult(result)
-    }
-
-    private fun hitungBmi(berat: Float, tinggi: Float, isMale: Boolean): HasilBmi {
-        val tinggiCm = tinggi / 100
-        val bmi = berat / (tinggiCm * tinggiCm)
-        val kategori = getKategori(bmi, isMale)
-        return HasilBmi(bmi, kategori)
     }
 
     private fun showResult(result: HasilBmi) {
@@ -59,29 +55,12 @@ class MainActivity : AppCompatActivity() {
             getKategoriLabel(result.kategori))
     }
 
-    private fun getKategori(bmi: Float, isMale: Boolean): KategoriBmi {
-        val kategori = if (isMale) {
-            when {
-                bmi < 20.5 -> KategoriBmi.KURUS
-                bmi >= 27.0 -> KategoriBmi.GEMUK
-                else -> KategoriBmi.IDEAL
-            }
-        } else {
-            when {
-                bmi < 18.5 -> KategoriBmi.KURUS
-                bmi >= 25.0 -> KategoriBmi.GEMUK
-                else -> KategoriBmi.IDEAL
-            }
-        }
-        return kategori
-    }
-
     private fun getKategoriLabel(kategori: KategoriBmi): String {
         val stringRes = when (kategori) {
             KategoriBmi.KURUS -> R.string.kurus
             KategoriBmi.IDEAL -> R.string.ideal
             KategoriBmi.GEMUK -> R.string.gemuk
         }
-        return getString(kategori)
+        return getString(stringRes)
     }
 }
