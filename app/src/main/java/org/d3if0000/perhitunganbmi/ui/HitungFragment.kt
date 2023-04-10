@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import org.d3if0000.perhitunganbmi.R
 import org.d3if0000.perhitunganbmi.databinding.FragmentHitungBinding
 import org.d3if0000.perhitunganbmi.model.HasilBmi
@@ -30,12 +30,14 @@ class HitungFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.button.setOnClickListener { hitungBmi() }
-        binding.saranButton.setOnClickListener {
-            it.findNavController().navigate(
-                R.id.action_hitungFragment_to_saranFragment
-            )
-        }
+        binding.saranButton.setOnClickListener { viewModel.mulaiNavigasi() }
         viewModel.getHasilBmi().observe(requireActivity(),{ showResult(it) })
+        viewModel.getNavigasi().observe(viewLifecycleOwner, {
+            if (it == null) return@observe
+            findNavController().navigate(HitungFragmentDirections
+                .actionHitungFragmentToSaranFragment(it))
+            viewModel.selesaiNavigasi()
+        })
     }
 
     private fun hitungBmi() {

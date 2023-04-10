@@ -9,6 +9,7 @@ import org.d3if0000.perhitunganbmi.model.KategoriBmi
 class MainViewModel : ViewModel() {
 
     private val hasilBmi = MutableLiveData<HasilBmi?>()
+    private val navigasi = MutableLiveData<KategoriBmi?>()
 
     fun hitungBmi(berat: Float, tinggi: Float, isMale: Boolean) {
         val tinggiCm = tinggi / 100
@@ -35,4 +36,14 @@ class MainViewModel : ViewModel() {
     }
 
     fun getHasilBmi(): LiveData<HasilBmi?> = hasilBmi
+
+    fun mulaiNavigasi() {
+        navigasi.value = hasilBmi.value?.kategori
+    }
+
+    fun selesaiNavigasi() {
+        navigasi.value = null
+    }
+
+    fun getNavigasi() : LiveData<KategoriBmi?> = navigasi
 }
