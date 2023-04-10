@@ -31,6 +31,8 @@ class HitungFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.button.setOnClickListener { hitungBmi() }
         binding.saranButton.setOnClickListener { viewModel.mulaiNavigasi() }
+        binding.shareButton.setOnClickListener { shareData() }
+
         viewModel.getHasilBmi().observe(requireActivity(),{ showResult(it) })
         viewModel.getNavigasi().observe(viewLifecycleOwner, {
             if (it == null) return@observe
