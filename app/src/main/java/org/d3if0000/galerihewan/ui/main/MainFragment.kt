@@ -5,14 +5,23 @@ import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 import org.d3if0000.galerihewan.R
+import org.d3if0000.galerihewan.data.SettingDataStore
+import org.d3if0000.galerihewan.data.dataStore
 import org.d3if0000.galerihewan.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
+
+    private val layoutDataStore: SettingDataStore by lazy {
+        SettingDataStore(requireContext().dataStore)
+    }
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this)[MainViewModel::class.java]
@@ -40,6 +49,12 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        layoutDataStore.preferenceFlow.asLiveData().observe(viewLifecycleOwner) {
+            isLinearLayout = it
+            setLayout()
+            activity?.invalidateOptionsMenu()
+        }
 
         viewModel.getData().observe(viewLifecycleOwner) {
             myAdapter.updateData(it)
@@ -69,9 +84,9 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_switch_layout) {
-            isLinearLayout = !isLinearLayout
-            setLayout()
-            setIcon(item)
+            lifecycleScope.launch {
+                layoutDataStore.saveLayout(!isLinearLayout, requireContext())
+            }
             return true
         }
         return super.onOptionsItemSelected(item)
