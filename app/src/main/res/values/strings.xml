@@ -4,4 +4,5 @@
     <string name="hewan_default">Ayam</string>
     <string name="gambar_hewan">Gambar Hewan</string>
     <string name="message">%1$s diklik!</string>
+    <string name="switch_layout">Ubah Tampilan</string>
 </resources>
